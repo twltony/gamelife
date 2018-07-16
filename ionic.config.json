@@ -1,0 +1,8 @@
+{
+  "name": "gamelife",
+  "app_id": "29009325",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
