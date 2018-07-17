@@ -1,0 +1,18 @@
+page-task {
+  ion-slides {
+    height: auto; 
+    // min-height: 100vh;
+  }
+  ion-slide {
+    -webkit-box-align: left !important;
+    -ms-flex-align: left !important;
+    align-items: left !important;
+    height: 100%;
+    min-height: 60vh;
+  }
+  .notask{
+      padding: 100px 0px;
+      height: 65vh;
+      color: #999;
+  }
+}

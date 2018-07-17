@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>任务</ion-title>
+    <ion-buttons end>
+      <button *ngIf="!isReorder" ion-button icon-only (click)="presentActionSheet()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+      <button *ngIf="isReorder" ion-button icon-only (click)="doneReorder()">
+          完成
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-title>
+      <ion-segment [(ngModel)]="selectedSegment" (ionChange)="onSegmentChanged($event)">
+        <ion-segment-button value="day" (ionSelect)="selectedDayTasks()" actived>
+          每日任务
+        </ion-segment-button>
+        <ion-segment-button value="week" (ionSelect)="selectedWeekTasks()">
+          每周任务
+        </ion-segment-button>
+        <ion-segment-button value="common" (ionSelect)="selectedCommonTasks()">
+          普通任务
+        </ion-segment-button>
+        <ion-segment-button value="dungeon" (ionSelect)="selectedDungeonTasks()">
+          副本任务
+        </ion-segment-button>
+      </ion-segment>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides #mySlider 
+     (ionSlideDidChange)="onSlideChanged($event)"
+     (ionSlideWillChange)="slideWillChange()"
+     >
+    <ion-slide *ngFor="let slide of slides" [ngStyle]="{ 'height': slidesMoving ? 'auto' : (slidesHeight + 'px') }">
+      <div>
+        <ion-list>
+            <ion-item-group [reorder]="isReorder" (ionItemReorder)="reorderItems($event,slide.id)">
+                <ion-item *ngFor="let item of slide?.data">
+                  <ion-label>
+                      {{ item }}
+                      <p>100</p>
+                    </ion-label>
+                  
+                  <ion-checkbox color="secondary" checked="true"></ion-checkbox>
+                </ion-item>
+            </ion-item-group>
+        </ion-list>
+      </div>
+      
+      <div class="notask" *ngIf="slide?.data.length==0">
+        <h1>没有创建任务
+        </h1>
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
+
+<ion-footer no-border>
+    <ion-toolbar>
+      <ion-title>1000</ion-title>
+      <ion-buttons end>
+        <button ion-button icon-only >
+            <ion-icon name="checkmark-circle"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-footer>
