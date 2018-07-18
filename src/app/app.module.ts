@@ -3,7 +3,7 @@ import { StatisticsPage } from '../pages/statistics/statistics';
 import { MorePage } from '../pages/more/more';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular/umd';
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { WishPage } from '../pages/wish/wish';

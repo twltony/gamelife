@@ -39,10 +39,10 @@
       <div>
         <ion-list>
             <ion-item-group [reorder]="isReorder" (ionItemReorder)="reorderItems($event,slide.id)">
-                <ion-item *ngFor="let item of slide?.data">
+                <ion-item *ngFor="let item of slide?.tasks">
                   <ion-label>
-                      {{ item }}
-                      <p>100</p>
+                      {{ item.name }}
+                      <p>{{item.quantity}}</p>
                     </ion-label>
                   
                   <ion-checkbox color="secondary" checked="true"></ion-checkbox>
@@ -51,7 +51,7 @@
         </ion-list>
       </div>
       
-      <div class="notask" *ngIf="slide?.data.length==0">
+      <div class="notask" *ngIf="slide?.tasks.length==0">
         <h1>没有创建任务
         </h1>
       </div>

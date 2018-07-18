@@ -1,6 +1,6 @@
-import { Task } from '../../../models/task.model';
+import { Task } from './../../../models/task.model';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular/umd';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 
 /**
  * Generated class for the CreateTaskPage page.
@@ -40,7 +40,7 @@ export class CreateTaskPage {
         for(let i in data){
           if(data[i].id == this.task.type){
             console.log('写data')
-            data[i].data.push(newTaskJson)
+            data[i].tasks.push(this.task)
           }
         }
       }

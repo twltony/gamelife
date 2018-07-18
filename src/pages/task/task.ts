@@ -1,7 +1,9 @@
+import { Task } from './../../models/task.model';
 import { CreateTaskPage } from './create-task/create-task';
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Slides, ActionSheetController } from 'ionic-angular/umd';
-import { ModalController } from 'ionic-angular/umd';
+import { NavController, Slides, ActionSheetController } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
+import { SlideModel } from '../../models/slide.model';
 
 // const currentSlide = this.slides[this.slider.getActiveIndex()];
 @Component({
@@ -27,28 +29,48 @@ export class TaskPage {
     public modalCtrl: ModalController
   ) {
     this.selectedSegment = 'day';
-    this.slides = [
-      {
-        id: "day",
-        title: "每日任务",
-        data: ["吃饭", "跑步", "游泳", "看书", "吃饭", "跑步", "游泳", "看书", "吃饭", "跑步", "游泳", "看书", "吃饭", "跑步", "游泳", "看书"]
-      },
-      {
-        id: "week",
-        title: "每周任务",
-        data: [1, 2, 3, 4]
-      },
-      {
-        id: "common",
-        title: "日常任务",
-        data: []
-      },
-      {
-        id: "dungeon",
-        title: "dungeon任务",
-        data: [1, 2, 3, 4, 5]
-      }
-    ];
+    let list = [];
+    let slideList = [];
+    let task = new Task();
+    task.name = "1";
+    task.points = 1;
+    task.quantity =1;
+    list.push(task);
+    let slideDayModel = new SlideModel("day","每日任务", list);
+    let slideWeekModel = new SlideModel("week","每周任务", list);
+    let slideCommonModel = new SlideModel("common","日常任务", list);
+    let slideDungeonModel = new SlideModel("dungeon","副本任务", list);
+    slideList.push(slideDayModel);
+    slideList.push(slideWeekModel);
+    slideList.push(slideCommonModel);
+    slideList.push(slideDungeonModel);
+
+    this.slides = slideList;
+
+    console.log(this.slides)
+
+    // this.slides = [
+    //   {
+    //     id: "day",
+    //     title: "每日任务",
+    //     data: ["吃饭", "跑步", "游泳", "看书", "吃饭", "跑步", "游泳", "看书", "吃饭", "跑步", "游泳", "看书", "吃饭", "跑步", "游泳", "看书"]
+    //   },
+    //   {
+    //     id: "week",
+    //     title: "每周任务",
+    //     data: [1, 2, 3, 4]
+    //   },
+    //   {
+    //     id: "common",
+    //     title: "日常任务",
+    //     data: []
+    //   },
+    //   {
+    //     id: "dungeon",
+    //     title: "dungeon任务",
+    //     data: [1, 2, 3, 4, 5]
+    //   }
+    // ];
     localStorage.data = JSON.stringify(this.slides);
   }
   onSegmentChanged(segmentButton) {

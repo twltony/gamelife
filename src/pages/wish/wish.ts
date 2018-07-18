@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular/umd';
-import { ActionSheetController } from 'ionic-angular/umd'
+import { NavController } from 'ionic-angular';
+import { ActionSheetController } from 'ionic-angular'
 
 @Component({
   selector: 'page-wish',
