@@ -33,18 +33,21 @@ export class CreateTaskPage {
    */
   createTask(){
     if(Object.keys(this.task).length>0){
-      let newTaskJson = JSON.stringify(this.task)
-      localStorage.newTask = newTaskJson;
-      let data = JSON.parse(localStorage.data)
-      if(Object.keys(data).length>0){
-        for(let i in data){
-          if(data[i].id == this.task.type){
-            console.log('写data')
-            data[i].tasks.push(this.task)
-          }
-        }
-      }
-      this.viewCtrl.dismiss(data);
+      // let newTaskJson = JSON.stringify(this.task)
+      // localStorage.newTask = newTaskJson;
+      // let data = JSON.parse(localStorage.data)
+      // let data = this.nativeStorage.getItem("slidePageData").then(
+      //   (data)=>{
+      //     if(Object.keys(data).length>0){
+      //       for(let i in data){
+      //         if(data[i].id == this.task.type){
+      //           console.log('写data')
+      //           data[i].tasks.push(this.task)
+      //         }
+      //       }
+      //     }
+      //   })
+      this.viewCtrl.dismiss(this.task);
     }
     // 
     

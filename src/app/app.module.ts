@@ -12,6 +12,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { TaskPage } from '../pages/task/task';
+import { NativeStorage } from '@ionic-native/native-storage';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { TaskPage } from '../pages/task/task';
   ],
   providers: [
     StatusBar,
+    NativeStorage,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

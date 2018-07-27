@@ -13,16 +13,16 @@
   <ion-toolbar>
     <ion-title>
       <ion-segment [(ngModel)]="selectedSegment" (ionChange)="onSegmentChanged($event)">
-        <ion-segment-button value="day" (ionSelect)="selectedDayTasks()" actived>
+        <ion-segment-button value="day" actived>
           每日任务
         </ion-segment-button>
-        <ion-segment-button value="week" (ionSelect)="selectedWeekTasks()">
+        <ion-segment-button value="week">
           每周任务
         </ion-segment-button>
-        <ion-segment-button value="common" (ionSelect)="selectedCommonTasks()">
+        <ion-segment-button value="common">
           普通任务
         </ion-segment-button>
-        <ion-segment-button value="dungeon" (ionSelect)="selectedDungeonTasks()">
+        <ion-segment-button value="dungeon">
           副本任务
         </ion-segment-button>
       </ion-segment>
@@ -41,10 +41,9 @@
             <ion-item-group [reorder]="isReorder" (ionItemReorder)="reorderItems($event,slide.id)">
                 <ion-item *ngFor="let item of slide?.tasks">
                   <ion-label>
-                      {{ item.name }}
-                      <p>{{item.quantity}}</p>
+                      {{ item?.name }}
+                      <p>{{item?.quantity}}</p>
                     </ion-label>
-                  
                   <ion-checkbox color="secondary" checked="true"></ion-checkbox>
                 </ion-item>
             </ion-item-group>
@@ -63,7 +62,7 @@
     <ion-toolbar>
       <ion-title>1000</ion-title>
       <ion-buttons end>
-        <button ion-button icon-only >
+        <button ion-button icon-only (click)="clickButton()">
             <ion-icon name="checkmark-circle"></ion-icon>
         </button>
       </ion-buttons>

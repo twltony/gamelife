@@ -4,6 +4,9 @@ import { Component, ViewChild } from '@angular/core';
 import { NavController, Slides, ActionSheetController } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { SlideModel } from '../../models/slide.model';
+import { NativeStorage } from '@ionic-native/native-storage';
+import { Platform } from 'ionic-angular';
+
 
 // const currentSlide = this.slides[this.slider.getActiveIndex()];
 @Component({
@@ -18,7 +21,7 @@ export class TaskPage {
   public slidesMoving: boolean = true;
 
   //TODO: 数据处理
-  slides: any = localStorage.data ? "" : localStorage.data;
+  slides: any;
   text;
   isReorder: boolean = false;
   items = [];
@@ -26,67 +29,75 @@ export class TaskPage {
   constructor(
     public navCtrl: NavController,
     public actionSheetCtrl: ActionSheetController,
+    private nativeStorage: NativeStorage,
+    private platform: Platform,
     public modalCtrl: ModalController
   ) {
+    
     this.selectedSegment = 'day';
-    let list = [];
-    let slideList = [];
-    let task = new Task();
-    task.name = "1";
-    task.points = 1;
-    task.quantity =1;
-    list.push(task);
-    let slideDayModel = new SlideModel("day","每日任务", list);
-    let slideWeekModel = new SlideModel("week","每周任务", list);
-    let slideCommonModel = new SlideModel("common","日常任务", list);
-    let slideDungeonModel = new SlideModel("dungeon","副本任务", list);
-    slideList.push(slideDayModel);
-    slideList.push(slideWeekModel);
-    slideList.push(slideCommonModel);
-    slideList.push(slideDungeonModel);
+    
+    this.platform.ready().then(() => {
+      //this.nativeStorage.setItem('slidePageData', { slideList: [] });
+      // this.nativeStorage.getItem('slidePageData').then(
+        
+      // )
+      debugger
+      nativeStorage.getItem('slidePageData').then(
+        (data) => {
+          if(Object.keys(data.slideList).length >0){
+            this.slides = data.slideList;
+          }else{
+            //初始化
+            let list = [];
+            let slideList = [];
+            let slideDayModel = new SlideModel("day", "每日任务", []);
+            let slideWeekModel = new SlideModel("week", "每周任务", []);
+            let slideCommonModel = new SlideModel("common", "日常任务", []);
+            let slideDungeonModel = new SlideModel("dungeon", "副本任务", []);
+            slideList.push(slideDayModel);
+            slideList.push(slideWeekModel);
+            slideList.push(slideCommonModel);
+            slideList.push(slideDungeonModel);
+            this.slides = slideList;
+            this.nativeStorage.setItem('slidePageData', { slideList: slideList })
+          }
+        }
+      )
+    })
 
-    this.slides = slideList;
-
-    console.log(this.slides)
-
-    // this.slides = [
-    //   {
-    //     id: "day",
-    //     title: "每日任务",
-    //     data: ["吃饭", "跑步", "游泳", "看书", "吃饭", "跑步", "游泳", "看书", "吃饭", "跑步", "游泳", "看书", "吃饭", "跑步", "游泳", "看书"]
-    //   },
-    //   {
-    //     id: "week",
-    //     title: "每周任务",
-    //     data: [1, 2, 3, 4]
-    //   },
-    //   {
-    //     id: "common",
-    //     title: "日常任务",
-    //     data: []
-    //   },
-    //   {
-    //     id: "dungeon",
-    //     title: "dungeon任务",
-    //     data: [1, 2, 3, 4, 5]
-    //   }
-    // ];
-    localStorage.data = JSON.stringify(this.slides);
   }
-  onSegmentChanged(segmentButton) {
-    console.log("Segment changed to", segmentButton.value);
+
+  clickButton(){
+    this.nativeStorage.setItem('test', { test: "test" }).then(
+      () => console.log('Stored item!')
+    )
+  }
+
+  /**
+   * @description 区块按钮点击事件
+   * @author 汤伟亮
+   * @param {*} segmentButton
+   * @memberof TaskPage
+   */
+  onSegmentChanged(segmentButton: any) {
     const selectedIndex = this.slides.findIndex((slide) => {
       return slide.id === segmentButton.value;
     });
     this.slider.slideTo(selectedIndex);
   }
 
-  onSlideChanged(slider) {
+
+  /**
+   * @description 滑动监听事件
+   * @author 汤伟亮
+   * @param {*} slider
+   * @memberof TaskPage
+   */
+  onSlideChanged(slider: any) {
     const currentSlide = this.slides[slider.getActiveIndex()];
-    if(currentSlide){
+    if (currentSlide) {
       this.selectedSegment = currentSlide.id;
     }
-
     try {
       this.slidesMoving = false;
       let element = this.slider._slides[slider.getActiveIndex()].firstChild as any;
@@ -94,6 +105,11 @@ export class TaskPage {
     } catch (e) { }
   }
 
+  /**
+   * @description 显示动作按钮
+   * @author 汤伟亮
+   * @memberof TaskPage
+   */
   presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: '任务',
@@ -154,8 +170,7 @@ export class TaskPage {
    * @memberof TaskPage
    */
   doneReorder() {
-    let jsonstr = JSON.stringify(this.slides);
-    localStorage.setItem("data", jsonstr);
+    this.nativeStorage.setItem('slidePageData', { slideList: this.slides })
     this.isReorder = false;
   }
 
@@ -165,35 +180,27 @@ export class TaskPage {
    * @memberof TaskPage
    */
   presentModal() {
-    const modal = this.modalCtrl.create(CreateTaskPage,{ taskType: this.selectedSegment });
+    const modal = this.modalCtrl.create(CreateTaskPage, { taskType: this.selectedSegment });
     modal.onDidDismiss(data => {
-      console.log(data);
+      let dataList = this.slides;
+      if (Object.keys(dataList).length > 0) {
+        for (let i in dataList) {
+          debugger
+          if (dataList[i].id == data.type) {
+            console.log('写data')
+            dataList[i].tasks.push(data)
+          }
+        }
+      }
+      console.log(dataList)
+      this.nativeStorage.setItem('slidePageData', { slideList: dataList })
     });
     modal.present();
-  }
-
-  public slideDidChange(): void {
-    
   }
 
   public slideWillChange(): void {
     this.slidesMoving = true;
   }
 
-  selectedDayTasks() {
-
-  }
-
-  selectedWeekTasks() {
-
-  }
-
-  selectedCommonTasks() {
-
-  }
-
-  selectedDungeonTasks() {
-
-  }
 }
 
